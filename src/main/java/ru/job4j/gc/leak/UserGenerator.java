@@ -14,7 +14,7 @@ public class UserGenerator implements Generate {
     public static final String PATH_PATRONS = "files/patr.txt";
 
     public static final String SEPARATOR = " ";
-    public static final Integer NEW_users = 1000;
+    public static final Integer NEW_USERS = 1000;
 
     public static List<String> names;
     public static List<String> surnames;
@@ -40,7 +40,7 @@ public class UserGenerator implements Generate {
     @Override
     public void generate() {
         users.clear();
-        for (int i = 0; i < NEW_users; i++) {
+        for (int i = 0; i < NEW_USERS; i++) {
             StringBuilder nameBuilder = new StringBuilder();
             nameBuilder.append(surnames.get(random.nextInt(surnames.size())));
             nameBuilder.append(SEPARATOR);
