@@ -1,7 +1,9 @@
 package ru.job4j.gc.leak;
 
+import ru.job4j.gc.leak.models.Comment;
 import ru.job4j.gc.leak.models.Post;
 
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -26,16 +28,22 @@ public class Menu {
             """;
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         Random random = new Random();
+
         UserGenerator userGenerator = new UserGenerator(random);
         CommentGenerator commentGenerator = new CommentGenerator(random, userGenerator);
-        Scanner scanner = new Scanner(System.in);
         PostStore postStore = new PostStore();
+
         start(commentGenerator, scanner, userGenerator, postStore);
     }
 
-    private static void start(CommentGenerator commentGenerator, Scanner scanner, UserGenerator userGenerator, PostStore postStore) {
+    private static void start(CommentGenerator commentGenerator,
+                              Scanner scanner,
+                              UserGenerator userGenerator,
+                              PostStore postStore) {
         boolean run = true;
+
         while (run) {
             System.out.println(MENU);
             System.out.println(SELECT);
@@ -44,27 +52,33 @@ public class Menu {
             if (ADD_POST == userChoice) {
                 System.out.println(TEXT_OF_POST);
                 String text = scanner.nextLine();
+
                 userGenerator.generate();
                 commentGenerator.generate();
+
                 var post = new Post();
                 post.setText(text);
-                post.setComments(CommentGenerator.getComments());
+                List<Comment> comments = commentGenerator.getComments();
+                post.setComments(comments);
                 var saved = postStore.add(post);
                 System.out.println("Generate: " + saved.getId());
             } else if (ADD_MANY_POST == userChoice) {
                 System.out.println(TEXT_OF_POST);
                 String text = scanner.nextLine();
                 System.out.println(COUNT);
-                String count = scanner.nextLine();
+                String countStr = scanner.nextLine();
                 memUsage();
-                for (int i = 0; i < Integer.parseInt(count); i++) {
+
+                int count = Integer.parseInt(countStr);
+                for (int i = 0; i < count; i++) {
                     System.out.printf("\rGenerate %.2f%% %.2fMb",
-                            ((double) i / Integer.parseInt(count)) * 100,
+                            ((double) i / count) * 100,
                             memUsage());
                     createPost(commentGenerator, userGenerator, postStore, text);
                 }
                 System.out.println();
                 memUsage();
+
             } else if (SHOW_ALL_POSTS == userChoice) {
                 System.out.println(PostStore.getPosts());
             } else if (DELETE_POST == userChoice) {
@@ -87,12 +101,15 @@ public class Menu {
 
     private static void createPost(CommentGenerator commentGenerator,
                                    UserGenerator userGenerator,
-                                   PostStore postStore, String text) {
+                                   PostStore postStore,
+                                   String text) {
         userGenerator.generate();
         commentGenerator.generate();
+
         var post = new Post();
         post.setText(text);
-        post.setComments(CommentGenerator.getComments());
+        List<Comment> comments = commentGenerator.getComments();
+        post.setComments(comments);
         postStore.add(post);
     }
 }
