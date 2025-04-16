@@ -16,9 +16,9 @@ public class UserGenerator implements Generate {
     public static final String SEPARATOR = " ";
     public static final Integer NEW_USERS = 1000;
 
-    public static List<String> names;
-    public static List<String> surnames;
-    public static List<String> patrons;
+    public List<String> names;
+    public List<String> surnames;
+    public List<String> patrons;
     private final List<User> users = new ArrayList<>();
     private final Random random;
 

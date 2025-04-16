@@ -13,7 +13,7 @@ public class CommentGenerator implements Generate {
     public static final String SEPARATOR = System.lineSeparator();
     private final List<Comment> comments = new ArrayList<>();
     public static final Integer COUNT = 50;
-    private static List<String> phrases;
+    private List<String> phrases;
     private final UserGenerator userGenerator;
     private final Random random;
 
